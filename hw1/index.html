@@ -17,10 +17,10 @@
             coordinates to interpolate the textures of given coordinates. For texture mapping, the project supported two kinds of
             Pixel Sampling Nearest Neighbour and Billinear and three kinds of level sampling 0-th, Nearest, and Billinear
             Interpolation. As for my thoughts on this assignment, I found it certainly cemented the techniques we learned
-            in the lecture as I had to spend hours debugging and learning what was going wrong. I understood the differences
-            between the frame and sample buffer and why each was important. I learned about the importance of defining the
-            unwinding direction of the vertices. I learned to understand the partial derivatives and why they were important in
-            calculating the specific mip map level.
+            in lecture as I had to spend hours debugging and re-reading the slides to figure out what to implement and what was
+            going wrong. This project helped me understand the differences between the frame and sample buffer and why each was
+            necessary. The project also helped me learn the naunces of rasterization such as the importance of defining
+            the unwinding direction of the vertices.
         </p>
     </section>
     <section>
@@ -44,11 +44,13 @@
                 it essentially checks each within the bounding box of the triangle. Therefore, it cannot be any worse by
                 design.
             </p>
-            <figure>
-                <img src="./assets/Rasterization.png" alt="Rasterizer Screenshot">
-                <figcaption>Base Rasterization of Triangles</figcaption>
+            <div class="images">
+                <figure>
+                    <img src="./assets/Rasterization.png" alt="Rasterizer Screenshot">
+                    <figcaption style="text-align: center;">Base Rasterization of Triangles</figcaption>
+                </figure>
+            </div>
 
-            </figure>
         </article>
     </section>
 
@@ -65,9 +67,9 @@
                 background to the edges of the triangle creating a more balanced color representation.
             </p>
         </article>
-        <article>
+        <div class="images">
             <figure>
-                <img src="./assets/1pxSampleRate.png" alt="Supersampling Screenshot at 1px sample rate">
+                <img src=" ./assets/1pxSampleRate.png" alt="Supersampling Screenshot at 1px sample rate">
                 <figcaption>Supersampling at 1px</figcaption>
 
             </figure>
@@ -83,26 +85,28 @@
             </figure>
             <p>
                 When our sample rate is 1px we can see that the tip of the triangle is disconnected while as we increase
-                the sample rate from 1 -> 16 the edge becomes more and more continuous. This is caused because when we only
+                the sample rate from 1 to 16 the edge becomes more and more continuous. This is caused because when we only
                 have one subsample we just check whether that pixel is in the triangle leaving us to a very
                 unbalanced image but as we increase the number of subsamples and start averaging out the colors we
                 increase the probability that these pixels will lie in the triangle allowing for a more smooth image.
             </p>
-        </article>
+        </div>
     </section>
 
     <section>
         <h2>Task 3 - Transforms</h2>
         <article>
-            <figure>
+            <figure class="images">
                 <img style="display: flex; align-items: center;" src="./assets/robot.svg" alt="Robot">
+                <figcaption>Robot doing the splits</figcaption>
             </figure>
 
             <p>
-                I rotated the right leg by -90 degrees and the left leg by 90 degrees, and adjusted both arms to a
-                45-degree
-                angle, aiming to give the robot a splits-like appearance.
+                I rotated the right leg by <span style="font-weight: bold;">-90°</span> and the left leg by <span
+                    style="font-weight: bold;">90°</span>, and adjusted both arms to a
+                <span style="font-weight: bold;">45°</span> angle, aiming to give the robot a splits-like appearance.
             </p>
+
         </article>
     </section>
 
@@ -116,7 +120,7 @@
                 point closer to vertex A is biased heavily more on A's values then B or C.
             </p>
 
-            <figure>
+            <figure class="images">
                 <img src="./assets/BlendedTriangle.png"
                     alt="Blended Triangle showing how Red, Green, and Blue colors blend using barycentric coordinates">
                 <figcaption>Illustration of color interpolation in a triangle using barycentric coordinates.</figcaption>
@@ -132,8 +136,7 @@
                 Red presents a brownish color. These colors align with the expected results of mixing the given colors, showcasing
                 how barycentric coordinates can interpolate colors.
             </p>
-
-            <figure>
+            <figure class="images">
                 <img src="./assets/ColorPicker.png" alt="Color Picker showing the result of color blending">
                 <figcaption>Image of a color wheel using barycentric coordinates for color interpolation.</figcaption>
             </figure>
@@ -275,15 +278,18 @@
             </tr>
         </table>
         </article>
-        <p>Below I rendered a Dice Texture Map</p>
+        <h3>Dice Texture Map</h3>
 
         <p>
-            Our most aliased result arises when setting the default sampling technique at level 0 with nearest pixel sampling.
-            This approach yields blocky and discontinous edges, leading to a distinctly pixelated image. In contrast, when we
-            switch to billinear sampling it creates smoother transition between edges and colors. And moreso exemplified
-            when we billinearly sample and level sample, we see an even cleaner and smoother edge definition. As for just level
-            sampling we see that the edges are continous but do not transition well between colors. Evidently, the combo of
-            billinear pixel sampling and nearest level sampling emerges as the superior technique.
+            Our most <span class="important">aliased</span> result arises when setting the default sampling technique at level 0
+            with <span class="important">nearest pixel sampling</span>.
+            This approach yields blocky and discontinuous edges, leading to a distinctly pixelated image. In contrast, when we
+            switch to <span class="important">bilinear sampling</span>, it creates smoother transitions between edges and colors.
+            Moreover, exemplified
+            when we bilinearly sample and level sample, we see an even cleaner and smoother edge definition. As for just level
+            sampling, we see that the edges are continuous but do not transition well between colors. Evidently, the combo of
+            <span class="important">bilinear pixel sampling</span> and <span class="important">nearest level sampling</span>
+            emerges as the superior technique.
         </p>
         <figure>
             <img src="./assets/L_ZERO_P_NEAREST.png" alt="L_ZERO_P_NEAREST">
