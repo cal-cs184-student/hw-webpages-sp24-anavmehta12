@@ -1,7 +1,371 @@
-<html>
-	<head>
-	</head>
-	<body>
-		Homework 2 index.html here
-	</body>
+<head>
+	<title>CS184 Homework 2 Write Up</title>
+	<link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+	<b>Link to website: </b><a href="https://cal-cs184-student.github.io/hw-webpages-sp24-anavmehta12/"> Website</a>
+
+	<h1>CS184 Homework 2 Report</h1>
+
+	<section>
+		<h2>Project Overview</h2>
+		<p>
+			In this Project, I implemented 1D de Casteljau Subdivision where we used control points and linear interpolated them
+			to form points that lie on a Bezier Curve. I then extended de Casteljau algorithm to evaluate Bezier Surfaces. I
+			implemented Phong Shading through area weighted vertex normals. Another major portion of this project was Loop
+			Subdivision which implemented through two key operatios, Edge Flipping and Edge Splitting. Edge flipping requires
+			flipping a shared edge while edge splitting splits a triangle into four new seperate triangles with a midpoint vertex.
+			Loop Subdivision then uses both to implement 4-1 subdivision by splitting edges then flipping edges that connect new
+			and old vertices. We also update old vertex positions by weighting it's old position based on it's degree and the sum
+			of its neighboring vertices. As for my thoughts on this assignment, I found it certainly cemented the techniques we
+			learned in lecture as I had to spend hours debugging and re-reading the slides to figure out what to implement and
+			what was going wrong. This project gave me a great understanding of the half edge data structure and an intuition on
+			how bezier curves are formed through control points
+		</p>
+	</section>
+	<section>
+		<h2>Part 1 - Bezier Curves with 1D de Casteljau Subdivision</h2>
+		<article>
+
+			<h3>de Casteljau Algorithm</h3>
+			<p>
+				de Casteljau's Algorithm is an algorithm that operates through a recursive process of linear interpolation between
+				points, gradually reducing the number of points until a single point is returned, one that must lie on the bezier
+				curve. We do this for all positions on the curve t ranging from t=0 at the beginning of the curve to t=1 at the
+				end of it.
+			</p>
+
+			<h3>Implementation</h3>
+			<p>
+				I implemented de Casteljau's by looping over the given set of points, where at any step could be a set
+				of intermediate points or the original control points, linear interpolating between consecutive pairs of points
+				with the weight t. I add all these new found points to a vector and recursively call the function with these
+				points. Once the vector contains one point, I return the point then return the intermediate points.
+			</p>
+		</article>
+		<h3>Interpolation over six control points</h3>
+		<div class="images">
+			<figure>
+				<img src="./assets/ControlPoints.png" alt="Original Control Points">
+				<figcaption style="text-align: center;">Original Control Points</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/Subdivision1.png" alt="Subdivision Level 1">
+				<figcaption style="text-align: center;">Subdivision Level 1</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/Subdivision2.png" alt="Subdivision Level 2">
+				<figcaption style="text-align: center;">Subdivision Level 2</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/Subdivision3.png" alt="Subdivision Level 3">
+				<figcaption style="text-align: center;">Subdivision Level 3</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/Subdivision4.png" alt="Subdivision Level 4">
+				<figcaption style="text-align: center;">Subdivision Level 4</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/BezierCurvePoint.png" alt="Point on the Bezier Curve">
+				<figcaption style="text-align: center;">Point on the Bezier Curve</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/BezierCurve.png" alt="Bezier Curve">
+				<figcaption style="text-align: center;">Bezier Curve</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/BezierCurve2.png" alt="New Bezier Curve">
+				<figcaption style="text-align: center;">New Bezier Curve</figcaption>
+			</figure>
+		</div>
+
+	</section>
+
+	<section>
+		<h2>Part 2 - Bezier Surfaces with Separable 1D de Casteljau </h2>
+		<article>
+			<h3>How de Casteljau's Algorithm extends to Bezier Surfaces</h3>
+			<p>
+				de Casteljau's Algorithm extends to Bezier Surfaces by evaluating n sets of control points where each set of
+				control points represents a bezier curve in the u direction. Once interpolating all curves in the u direction we
+				can then use the points on the u curves to interpolate points that lie on bezier curve in the v direction. We
+				repeat for various values of u, v to reconstruct the Bezier surface.
+			</p>
+
+			<h3>Implementation of de Casteljau</h3>
+			<p>
+				To implement de Casteljau for Bezier Surfaces, I implemented three different functions. A recursive function,
+				evaluateStep that computes a step of the de Casteljau algorithm and returns either a set of intermediate points
+				or a point on the Bezier curve. A wrapper function, evaluate1D, that calls evaluateStep with a set of control
+				points and a interpolation parameter t designed to abstract away the recursive steps to just return a point on the
+				Bezier Curve. And finally a function that iterates over all sets of control points and calling evaluateStep on a
+				set and adding the returned point to a vector that contains all points on a Bezier curve in the u direction. I
+				then call evaluate1D on that u vector as control points to find a point on the Bezier surface.
+			</p>
+
+		</article>
+		<div class="images">
+			<figure>
+				<img src=" ./assets/Teapot.png" alt="Bezier Curves on a Teapot">
+				<figcaption>Bezier Curves on a Teapot</figcaption>
+
+			</figure>
+		</div>
+	</section>
+
+	<section>
+		<h2>Part 3 - Area-Weighted Vertex Normals</h2>
+		<article>
+			<h3>Implementation</h3>
+			<p>
+				Starting at the given vertex, I pointed to it's halfedge and obtained the normal of halfedge's face and the length
+				of every side of that face. Found the area of the triangle and added the weighting of each face's normal to it's
+				area to a rolling vector sum. I moved the halfedge pointer to it's twin to find the next face and iterated until
+				the halfedge pointed back to the start halfedge. Then we just return the normalized vector sum.
+			</p>
+		</article>
+
+		<div class="images">
+			<figure>
+				<img src=" ./assets/FlatShading.png" alt="Flat shading on a Teapot">
+				<figcaption>Flat shading on a Teapot</figcaption>
+			</figure>
+
+			<figure>
+				<img src=" ./assets/PhongShading.png" alt="Phong shading on a Teapot">
+				<figcaption>Phong shading on a Teapot</figcaption>
+			</figure>
+		</div>
+
+	</section>
+
+
+	<section>
+		<h2>Task 4 - Edge Flip</h2>
+		<article>
+
+			<div>
+				<h3>Implementation of Edge Flip Operation</h3>
+				<p>
+					To implement the Edge Flip operation, I decided to first store the half edges forming f0 (Left Face) and then
+					use the twins of those half edges to find the half edges of f1 (Right Face). I identified each vertex forming
+					the two triangles (V0, V1, V3) and (V0, V2, V3) then changed the half edges that each vertex stores.For the
+					original vertices adjacent to the shared edge (V1, V2), their half-edge references were updated to one of
+					its other departing half-edge. Regarding the new vertices adjacent to the edge post-flip (V0, V3), their
+					half-edge references were set to the edge intended for flipping and its twin, respectively. Next, f0's
+					half-edge was set to one of the top three half-edges, and f1's half-edges to one of the bottom three. Each
+					face was then restructured by linking certain pre-existing half-edges from the two faces, creating a cohesive
+					face. Finally, we set the neighbors of each flipped halfedge.
+				</p>
+			</div>
+
+			<div class="images">
+				<figure>
+					<img src="./assets/BeforeFlips.png" alt="Teapot Edge before flips">
+					<figcaption>Before Flips</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/OneFlip.png" alt="Teapot Edge after one flip">
+					<figcaption>One Flip</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/TwoFlips.png" alt="Teapot Edge after two flips">
+					<figcaption>Two Flips</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/ThreeFlips.png" alt="Teapot Edge after three flips">
+					<figcaption>Three Flips</figcaption>
+				</figure>
+			</div>
+
+			<h3>Debugging Process</h3>
+			<p>
+				One of the most signifigant challenges I encountered was a bug stemming from forgetting to reconnect the
+				half-edges for newly created faces, which resulted in openings in the mesh when I flip an edge. The debugging
+				process was mainly gaining understanding of all the pointers involved and the halfedge data structure. I
+				debugged by drawing both triangle's pointers before and after the flip to properly plan out the operation.
+			</p>
+		</article>
+	</section>
+
+	<section>
+		<h2>Task 5 - Edge Split</h2>
+		<div>
+			<h3>Implementation of the Edge Split Operation</h3>
+			<p>
+				For the edge splitting, we have to add two new faces <code>(f2, f3)</code>, two new edges <code>(e2, e3)</code>,
+				eight new half edges (<code>f0h0, f0h1, f1h0, f1h1, f2h0, f2h1, f3h0, f3h1</code> and
+				<code>f0h2, f1h2, f2h2, f3h2</code> are the original halfedges)</code> and finally the
+				midpoint vertex (v4). For each face and original vertex, we can update their halfedge pointer to their
+				corresponding original halfedges, ie <code>f0,V0->f0h2</code>. The association between each face and its original
+				vertex with their respective original half-edges is maintained, for example, f0 and V0 are linked to
+				<code>f0h2</code> The position of V4 is determined by averaging the positions of vertices V1 and V2, which are
+				connected by the shared edge. V4 is then assigned to one of the new half-edges leaving V4. The half-edge pointer
+				for each edge is updated to one of the two half-edges that lie along it. Finally, each face is reconstructed by
+				settings the neighbors of the new half edges.
+			</p>
+
+			<div class="images">
+				<figure>
+					<img src="./assets/BeforeSplits.png" alt="Teapot Mesh before splits">
+					<figcaption>Mesh before Edge Splits</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/Splits.png" alt="Teapot Mesh after Edge Splits">
+					<figcaption>Mesh after Edge Splits</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/BeforeSequenceOfOperations.png" alt="Teapot Mesh before Sequence of Splits/Flips">
+					<figcaption>Mesh before Sequence of Splits/Flips</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/SplitFlipSplitFlipCombo.png" alt="Teapot Mesh after Sequence of Splits/Flips">
+					<figcaption>Split - Flip - Split - Flip Sequence of Operations</figcaption>
+				</figure>
+
+			</div>
+
+			<h3>Debugging Process</h3>
+			<p>
+				The debugging process was very straightforward as Task 4 already prepared me for potential bugs and understanding
+				of how to solve them.
+			</p>
+		</div>
+
+	</section>
+	<section>
+		<h2>Part 6: Loop Subdivision for Mesh Upsampling</h2>
+
+		<h3>Implementation of Loop Subdivision</h3>
+		<section>
+			To implement Loop Subdivision, I split the routine into four different loops.
+
+			<h4>Loop 1</h4>
+			This first loop iterates over the edges, calculating the vertices positions after splitting. For existing vertices,
+			their new positions are calculated using the formula <code>(1 - n * u) * original_position + u *
+			original_neighbor_position_sum</code> where <code>(1 - n * u) * original_position</code>. The formula balances between
+			maintaining the vertex's original location with the influence of the adjacent vertices' positions. The position of the
+			midpoint vertex created by the split is then defined by <code>(V0 + V1) * 3/8 + 1/8 * (V2 + V3)</code> and this
+			calculated positions is then stored in the current edge's newPosition.
+			</p>
+
+			<h4>Loop 2</h4>
+			<p>
+				We traverse the edges of the original mesh, splitting each edge e. The vertex v, returned by splitEdge, represents
+				the newly added vertex by the edge split. We then assign v's position to the newPosition that was calculated and
+				stored for edge e in the previous loop. We must set the vertex and both new edges' isNew to true indicating they
+				are mesh elements that were created by subdivision.
+			</p>
+
+			<h4>Loop 3</h4>
+			<p>
+				Following the edge splitting, we then loop over the splitted mesh flipping any newly created edges that connect an
+				old vertex to a new vertex.
+			</p>
+
+			<h4>Loop 4</h4>
+			<p>
+				Finally, for every pre-existing vertex in the mesh we update it's position to the newPosition calculated in loop
+				1.
+			</p>
+
+			<h4>Debugging Tricks</h4>
+			<p>
+				One very important debugging trick I implemented was for loop 2. As we had to iterate over the original mesh
+				edges, I had to copy the mesh edge elements into a seperate list as split the mesh while iterating over caused an
+				infinite loop.
+			</p>
+
+			<h3>Observations on Subdivision</h3>
+			<p>
+				For each level of subdivision, we can noticeably see the decrease in sharpness of edges of this icosahedron as the
+				vertices are being pulled in by its neighboring vertices smoothening out the vertex.
+			</p>
+			<div class="images">
+				<figure>
+					<img src="./assets/LoopSubdivisionLevel1.png">
+					<figcaption>Original Mesh</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/LoopSubdivisionLevel2.png">
+					<figcaption>Mesh after a level of subdivision</figcaption>
+				</figure>
+
+				<figure>
+					<img src="./assets/LoopSubdivisionLevel3.png">
+					<figcaption>Mesh after two levels of subdivision</figcaption>
+				</figure>
+			</div>
+
+			<h4>Improve Corner Sharpness</h4>
+			<p>
+				To combat this smoothening we can apply lots of uniform edge splits that can reduce the amount that a
+				neighboring vertex will move and will pull in the corner vertex less keeping it sharp. Also the newly created
+				vertex from the edge split will help preserve the corner vertex even more.
+			</p>
+		</section>
+		<h4>Reducing Asymetry</h4>
+		<p>
+			As we subdivide the cube, we notice that the cube is becomes more and more asymetric after repeated subdivisions. This
+			is because vertices have different degrees which will cause triangles to appear more in certain areas instead of being
+			symmetric. We can fix this by splitting the edge across each face to make a more uniform distribution of
+			degrees. Comparing both the original mesh and the preprocessed mesh, it is very clear that the preprocessed mesh is
+			more symmetrical and the degree of the vertices are more uniform.
+		</p>
+
+		<h3>Original Cube Mesh</h3>
+
+		<div class="images">
+			<figure>
+				<img src="./assets/OriginalCube.png">
+				<figcaption>Original Cube Mesh </figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/CubeSubdivide1.png">
+				<figcaption>Original Cube Mesh subdivided one level</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/CubeSubdivide2.png">
+				<figcaption>Original Cube Mesh subdivided two levels</figcaption>
+			</figure>
+		</div>
+
+		<h3>Preprocessed Cube Mesh</h3>
+		<div class="images">
+			<figure>
+				<img src="./assets/PreprocessedCube.png">
+				<figcaption>Preprocessed Cube Mesh no subdivision</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/PreprocessedCubeSubdivided1.png">
+				<figcaption>Preprocessed Cube Mesh subdivided one level</figcaption>
+			</figure>
+
+			<figure>
+				<img src="./assets/PreprocessedCubeSubdivided2.png">
+				<figcaption>Preprocessed Cube Mesh subdivided two levels</figcaption>
+			</figure>
+		</div>
+	</section>
+
+</body>
+
 </html>
