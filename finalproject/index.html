@@ -29,6 +29,12 @@
                 step. As for heterogenous fog, we implemented a Perlin Noise to vary the densities when traveling through the
                 medium.
             </p>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/lightbeam10_seed2468_0-08beta_o4_0-5_1500den.png">
+                </div>
+            </div>
+
         </section>
         <section id="technical-approach">
             <h2>Technical Approach</h2>
@@ -100,18 +106,24 @@
             <iframe src="https://www.desmos.com/calculator/wlycrs7jbf?embed" width="500" height="500"
                 style="border: 1px solid #ccc" frameborder=0></iframe>
             <p>which in turn produce the follow different size of radiance fall of (haze area) in the fog near the area light.</p>
-            <div class="image">
-                <img src="./assets/spheres_distance9thpower_focused_noroullete.png">
-                <code>9th power exponential attenuation function</code>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/spheres_distance9thpower_focused_noroullete.png">
+                    <code>9th power exponential attenuation function</code>
+                </div>
+
+                <div class="image">
+                    <img src="./assets/spheres_distance5thpower_focused.png">
+                    <code>5th power exponential attenuation function, big beta</code>
+                </div>
             </div>
-            <div class="image">
-                <img src="./assets/spheres_distance5thpower_focused.png">
-                <code>5th power exponential attenuation function, big beta</code>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/spheres_distance5thpower.png">
+                    <code>5th power exponential attenuation function, small beta</code>
+                </div>
             </div>
-            <div class="image">
-                <img src="./assets/spheres_distance5thpower.png">
-                <code>5th power exponential attenuation function, small beta</code>
-            </div>
+
             <h3>Heterogenous Fog</h3>
             <p>
                 For Heterogenous fog, the density varies throughout the medium instead of staying constant. To create this density
@@ -148,27 +160,36 @@
 
                 Here is a nice chart
                 from <a href="https://eev.ee/blog/2016/05/29/perlin-noise/">.</a>
-            <div class="image">
-                <img src="./assets/octave.jpg">
-                <code>octave function</code>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/octave.png">
+                    <code>octave function</code>
+                </div>
+
             </div>
             <p>Different octaves and persistence values render clouds of different fluffiness:</p>
-            <div class="image">
-                <img src="./assets/boundaryless_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
-                <code>cloud with 3 octave and 0.7 persistence</code>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/boundaryless_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
+                    <code>cloud with 3 octave and 0.7 persistence</code>
+                </div>
+                <div class="image">
+                    <img src="./assets/boundaryless_cloudish_z0-5_o4_0-5_inroom_1000den.png">
+                    <code>cloud with 4 octave and 0.5 persistence</code>
+                </div>
+
             </div>
-            <div class="image">
-                <img src="./assets/boundaryless_cloudish_z0-5_o4_0-5_inroom_1000den.png">
-                <code>cloud with 4 octave and 0.5 persistence</code>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/boundaryless_cloudish_z0-5_o5_0-7_inroom_1000den.png">
+                    <code>cloud with 5 octave and 0.7 persistence</code>
+                </div>
+                <div class="image">
+                    <img src="./assets/boundaryless2_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
+                    <code>cloud with 3 octave and 0.7 persistence</code>
+                </div>
             </div>
-            <div class="image">
-                <img src="./assets/boundaryless_cloudish_z0-5_o5_0-7_inroom_1000den.png">
-                <code>cloud with 5 octave and 0.7 persistence</code>
-            </div>
-            <div class="image">
-                <img src="./assets/boundaryless2_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
-                <code>cloud with 3 octave and 0.7 persistence</code>
-            </div>
+
             </p>
 
             <h2>Results</h2>
