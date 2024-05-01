@@ -148,6 +148,16 @@
                 our light ray. While we march our light ray we accumulate density values along each sample along the ray. We
                 replace our constant density with our Perlin Noise function and sample at each point for both rays.
             </p>
+            <div class="results">
+                <div class="image">
+                    <img src="./assets/HomogenousFog1.png">
+                    <code>Homogenous Fog rendering of ./dae/sky/CBSpheres.dae</code>
+                </div>
+                <div class="image">
+                    <img src="./assets/HeterogenousFog1.png">
+                    <code>Heterogenous Fog rendering of ./dae/sky/CBSpheres.dae</code>
+                </div>
+            </div>
             <h4>Perlin Noise Octave</h4>
             <p>While Perlin noise are commonly used in generating natural texture, the addition of octaves give clouds the extra
                 furry effect and additional layer of detail and complexity. This method invovles with combining several Perlin
@@ -191,18 +201,6 @@
             </div>
 
             </p>
-
-            <h2>Results</h2>
-            <div class="results">
-                <div class="image">
-                    <img src="./assets/HomogenousFog1.png">
-                    <code>Homogenous Fog rendering of ./dae/sky/CBSpheres.dae</code>
-                </div>
-                <div class="image">
-                    <img src="./assets/HeterogenousFog1.png">
-                    <code>Heterogenous Fog rendering of ./dae/sky/CBSpheres.dae</code>
-                </div>
-            </div>
             <h3>Spot Light Sampling</h3>
             <p>
                 We wanted to create realistic soft light beams through the fog to visualize how light scatters through a
@@ -297,6 +295,29 @@
                 make progress easily.
             </p>
         </section>
+
+        <section id="next-steps">
+            <h2>Next Steps</h2>
+            <h4>Color Scattering</h4>
+            <p>
+
+                We attempted rayleigh scattering by having blue color exponentially decaying throughout distance, and red color
+                exponentially increasing throughout distance. This is supposed to give a blue cloud and yellow rays through the
+                cloud (similar to the sunset), but we are not able to completely incorporate ray marching of the cloud with
+                recursive
+                bounces of the original ray tracing mechanism. We have tried dynamically shifting the color of L_out, the emission
+                of light or material based on the average density from the hit point to the light source and the rayleigh
+                scattering formula, but more work needs to be done.
+            </p>
+            <h4>Better Light Shafts</h4>
+            <p>
+                We achieved shining a spotlight path, but better light shafts should depend on the varying density of cloud,
+                leaving shadows and light spots in the scene. We have tried sampling the average density of fog from sample point
+                to hit point and adjusting attenuation accordingly, but the generation of our cloud is a 2D shell instead of a 3D
+                volume, which creates discrepancy between light shafts and the density of cloud.
+            </p>
+        </section>
+
         <section id="Presentation">
             <a href="https://www.youtube.com/watch?v=--lKMA1KBt4">Presentation Video</a>
             <a href=" https://docs.google.com/presentation/d/1fdTJ2BFZyDH3qxRIoOQSyJI1OL9O9ytlayWLHRQ2p2w/edit?usp=sharing">Presentation
