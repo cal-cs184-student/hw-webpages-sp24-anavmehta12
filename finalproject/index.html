@@ -25,9 +25,9 @@
             <p>
                 Through this project, our goal was to render the Tyndall Effect by shooting a ray through a volumetrically
                 rendered medium. We approached the problem by first rendering both homogenous and heterogenous fog. We implemented
-                ray marching where we had to account for the probabilities of absorption, scattering, and transmittance for each
-                step. As for heterogenous fog, we implemented a Perlin Noise to vary the densities when traveling through the
-                medium.
+                ray marching where we had to account for absorption, scattering, and transmittance interactions between the
+                particles and the medium. As for heterogenous fog, we implemented a Perlin Noise function to vary the densities
+                when traveling through the medium.
             </p>
             <div class="results">
                 <div class="image">
@@ -41,17 +41,17 @@
             <h3>Starting Point & Problem Context</h3>
             <p>
                 Our starting point for this project is the CS 184 Project 3 ray tracer. The skeleton code includes the ray-scene
-                intersection, acceleration structure, and physically based lighting and materials. While our starting point able
-                to generate realistic images, it lacks of the implementation of spotlight and advanced volumetric rendering
+                intersection, acceleration structure, and physically based lighting and materials. While our starting point is
+                able to generate realistic images, it lacks the implementation of a spotlight and advanced volumetric rendering
                 techniques that are required to depict phenomena like the Tyndall Effect. To address the issues, we expanded the
-                render's capabilities by including a complex volumetric rendering,
-                implementing both homogenous and heterogeneous fog.
+                render's capabilities by including a complex volumetric rendering, implementing both homogenous and heterogeneous
+                fog.
             </p>
             <p>
                 The Tyndall Effect is a optical phenomenon where light is scattered by particles that are dispersed in a medium.
-                This effect causes the particles, like dust or droplets, become visible when light shines through them.
+                This effect causes the particles, like dust or droplets, to become visible when light shines through them.
 
-                In this project, by focusing on rendering fog and cloud effects, we essentially demonstrate the Tyndall Effect.
+                In this project, by focusing on rendering fog and cloud effects, we essentially render the Tyndall Effect.
                 Fog, consists of tiny water droplets that suspends in airs, will scatter the light passing through them.
             <h3>Homogenous Fog</h3>
             <h4>Initial idea</h4>
@@ -100,12 +100,13 @@
             </p>
             <h4>Distance Attenuation Variation</h4>
 
-            <p>by adjusting coefficients and power of the exponential attenuation function, we obtain different levels of radiance
-                fall of in
-                the area near the light. Here is a Desmos graph of different exponential fall of function:</p>
+            <p>By adjusting the coefficients and power of the exponential attenuation function, we obtain different levels of
+                radiance fall of in the area near the light. Here is a Desmos graph of different exponential fall off function:
+            </p>
             <iframe src="https://www.desmos.com/calculator/wlycrs7jbf?embed" width="500" height="500"
                 style="border: 1px solid #ccc" frameborder=0></iframe>
-            <p>which in turn produce the follow different size of radiance fall of (haze area) in the fog near the area light.</p>
+            <p>Which in turn produce the following different size of radiance fall off (haze area) in the fog near the area light.
+            </p>
             <div class="results">
                 <div class="image">
                     <img src="./assets/spheres_distance9thpower_focused_noroullete.png">
@@ -160,20 +161,18 @@
             </div>
             <h4>Perlin Noise Octave</h4>
             <p>While Perlin noise are commonly used in generating natural texture, the addition of octaves give clouds the extra
-                furry effect and additional layer of detail and complexity. This method invovles with combining several Perlin
-                Noise
-                function at different frequencies and amplitudes. When generating texture like clouds, using multiple octaves
-                allows
-                for creating more varied patterns. The low frequency Perlin noise provides a broad and main shapes of the cloud.
-                The second and higher octave, on the other hand, provides variation in the cloud's edges and them more
-                natural-looking.
+                furry effect and additional layer of detail and complexity. This method involves with combining several Perlin
+                Noise function at different frequencies and amplitudes. When generating texture like clouds, using multiple
+                octaves allows for creating more varied patterns. The low frequency Perlin noise provides a broad and main shapes
+                of the cloud. The second and higher octave, on the other hand, provides variation in the cloud's edges and them
+                more natural-looking.
 
                 Here is a nice chart
                 from <a href="https://eev.ee/blog/2016/05/29/perlin-noise/">.</a>
             <div class="results">
                 <div class="image">
                     <img src="./assets/octave.png">
-                    <code>octave function</code>
+                    <code>Octave function</code>
                 </div>
 
             </div>
@@ -181,22 +180,22 @@
             <div class="results">
                 <div class="image">
                     <img src="./assets/boundaryless_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
-                    <code>cloud with 3 octave and 0.7 persistence</code>
+                    <code>Cloud with 3 octave and 0.7 persistence</code>
                 </div>
                 <div class="image">
                     <img src="./assets/boundaryless_cloudish_z0-5_o4_0-5_inroom_1000den.png">
-                    <code>cloud with 4 octave and 0.5 persistence</code>
+                    <code>Cloud with 4 octave and 0.5 persistence</code>
                 </div>
 
             </div>
             <div class="results">
                 <div class="image">
                     <img src="./assets/boundaryless_cloudish_z0-5_o5_0-7_inroom_1000den.png">
-                    <code>cloud with 5 octave and 0.7 persistence</code>
+                    <code>Cloud with 5 octave and 0.7 persistence</code>
                 </div>
                 <div class="image">
                     <img src="./assets/boundaryless2_cloudish_z0-5_o3_0-7_inroom_better_6000den.png">
-                    <code>cloud with 3 octave and 0.7 persistence</code>
+                    <code>Cloud with 3 octave and 0.7 persistence</code>
                 </div>
             </div>
 
@@ -213,7 +212,7 @@
                 the vector pointing toward the object. We denote the angle as <code>spot_angle</code>
             </p>
             <p>
-                If the <code>spot_angle</code>is less than the predefined angle of the spotlight, it indicates the object
+                If the <code>spot_angle</code> is less than the predefined angle of the spotlight, it indicates the object
                 is
                 within the light's cone and the illumination should be calculated. The <code> falloff </code> is
                 calculated to
@@ -227,11 +226,9 @@
                 \[ p = \frac{1}{\Omega} = \frac{1}{2\pi (1 - \cos(\text{angle}))} \]
 
                 By adjusting the PDF according to the solid angle, the function ensures the density reflects the physical
-                behavior
-                of a spotlight, where more light is concentrated in a narrow angle. The function will return the light
-                radiance
-                scaled by the falloff. If the object is outside the spotlight's angle, the function returns a zero vector,
-                indicating there's no light contribution, which effective handles objects lying outside the light beam.
+                behavior of a spotlight, where more light is concentrated in a narrow angle. The function will return the light
+                radiance scaled by the falloff. If the object is outside the spotlight's angle, the function returns a zero
+                vector, indicating there's no light contribution, which effective handles objects lying outside the light beam.
 
             </p>
             <div class="results">
@@ -281,12 +278,14 @@
         </section>
         <section id="lessons-learned">
             <h2>Lessons Learned</h2>
-            <p>Understand the underlying math principles first: Debugging the rendering code is hard as it is challenging to
-                trace errors back to their source. For instance, in the creating a spotlight, it's essential to understand the
-                Monte Carlo Integration on the 3D cone shape object. Without a deep understanding of the math involved,
-                identifying the root cause of such problems becomes significantly more complex.
+            <p>
+                To try to understand the underlying math principles first: Debugging the rendering code is hard as it is and
+                challenging to trace errors back to their source. For instance, in the creating a spotlight, it's essential to
+                understand the Monte Carlo Integration on the 3D cone shape object. Without a deep understanding of the math
+                involved, identifying the root cause of such problems becomes significantly more complex.
             </p>
-            <p> To breakdown a big goal into smaller milestones: it was hard for us to get started on rendering the Tyndall Effect
+            <p>
+                To breakdown a big goal into smaller milestones: it was hard for us to get started on rendering the Tyndall Effect
                 as it involved complicated algorithms. If instead we had just set a series of incremental targets, we could have
                 made this project easier. Initially, we could have focused on understanding the physical principles and math
                 models behind light scattering. Then we could have changed the BSDF to achieve a more realistic effect. Following
@@ -301,13 +300,12 @@
             <h4>Color Scattering</h4>
             <p>
 
-                We attempted rayleigh scattering by having blue color exponentially decaying throughout distance, and red color
-                exponentially increasing throughout distance. This is supposed to give a blue cloud and yellow rays through the
-                cloud (similar to the sunset), but we are not able to completely incorporate ray marching of the cloud with
-                recursive
-                bounces of the original ray tracing mechanism. We have tried dynamically shifting the color of L_out, the emission
-                of light or material based on the average density from the hit point to the light source and the rayleigh
-                scattering formula, but more work needs to be done.
+                We attempted rayleigh scattering by having blue color exponentially decaying over distance, and red
+                color exponentially increasing over distance. This is supposed to give a blue cloud and yellow rays through
+                the cloud (similar to the sunset), but we are not able to completely incorporate ray marching of the cloud with
+                recursive bounces of the original ray tracing mechanism. We have tried dynamically shifting the color of L_out,
+                the emission of light or material based on the average density from the hit point to the light source and the
+                rayleigh scattering formula, but more work needs to be done.
             </p>
             <h4>Better Light Shafts</h4>
             <p>
